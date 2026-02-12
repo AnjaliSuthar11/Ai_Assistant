@@ -1,0 +1,29 @@
+import express from "express";
+import dotenv from "dotenv";
+dotenv.config();
+
+import connectDb from "./config/db.js";
+import authRouter from "./routes/auth.routes.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+
+const app = express();
+const port = process.env.PORT || 5000;
+
+// ✅ MIDDLEWARE FIRST
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true,
+}));
+
+app.use(express.json());           // 🔥 MUST be before routes
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+// ✅ ROUTES AFTER
+app.use("/api/auth", authRouter);
+
+app.listen(port, () => {
+  connectDb();
+  console.log("Server Started");
+});
