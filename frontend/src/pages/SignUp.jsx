@@ -9,7 +9,7 @@ import axios from "axios"
 
 const SignUp = () => {
 
-  const {serverUrl}= useContext(userDataContext)
+  const {serverUrl,userData,setUserData}= useContext(userDataContext)
 
 const navigate = useNavigate()
     const [showPassword,setshowPassword] = useState(false)
@@ -17,23 +17,29 @@ const navigate = useNavigate()
     const [name,setName]=useState("")
     const [email,setEmail]= useState("")
     const [Err,setErr] = useState("")
+    const [loading,setLoading]=useState(false)
 
     const handleSignUp=async (e)=>{
       
       e.preventDefault()
       setErr("")
+      setLoading(true)
 
         try{
           const result = await axios.post(`${serverUrl}/api/auth/signup`,
       { name, email, password },
-      { withCredentials: true } 
+      {withCredentials: true } 
     );
-
+          setUserData(result.data)
           console.log(result)
+          setLoading(false)
+          navigate("/customize")
         }
         catch(error){
           console.log(error.message)
+          setUserData(null)
           setErr(error.response.data.message)
+            setLoading(false)
         }
     }
 
@@ -71,7 +77,8 @@ Err.length > 0 && <p className='text-red-500 '>
   *{Err}
 </p>
 }
-<button className='min-w-[150px] text-black mt-[30px] font-semibold h-[60px] bg-white rounded-full text-[19px] '>Sign Up</button>
+<button className='min-w-[150px] text-black mt-[30px] font-semibold h-[60px] bg-white rounded-full text-[19px] ' disabled={loading}>{loading? "Loading....":"Sign Up"}</button>
+
 <p className='text-white text-[18px] cursor-pointer' onClick={()=>navigate("/signin")}>Already have an account ? <span className='text-blue-400'>Sign In</span></p>
        </form>
     </div> 

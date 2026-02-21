@@ -9,36 +9,43 @@ import axios from "axios"
 
 const SignIn = () => {
 
-  const {serverUrl}= useContext(userDataContext)
+  const {serverUrl,userData,setUserData} = useContext(userDataContext)
 
 const navigate = useNavigate()
     const [showPassword,setshowPassword] = useState(false)
     const [password,setPassword] = useState("")
-    const [email,setEmail]= useState("")
+    const [email,setEmail] = useState("")
     const [Err,setErr] = useState("")
+    const [loading,setLoading] = useState(false)
 
-    const handleSignUp=async (e)=>{
+    const handleSignIn=async (e)=>{
       
       e.preventDefault()
       setErr("")
+      setLoading(true)
 
         try{
-          const result = await axios.post(`${serverUrl}/api/auth/signup`,
-      { name, email, password },
+          const result = await axios.post(`${serverUrl}/api/auth/signin`,
+      { email, password },
       { withCredentials: true } 
+    
     );
-
-          console.log(result)
+            setUserData(result.data)
+          console.log(result);
+          setLoading(false)
+          navigate("/")
         }
         catch(error){
           console.log(error.message)
+          setUserData(null)
+          setLoading(false)
           setErr(error.response.data.message)
         }
     }
 
   return (
-    <div className='w-full h-[100vh] bg-cover flex justify-center items-center ' style={{backgroundImage:`url(${bg})`}}>
-       <form onSubmit={handleSignUp} className='w-[90%] h-[600px] max-w-[500px] bg-[#00000062] backdrop-blur shadow-lg shadow-black flex flex-col items-center justify-center gap-[20px] px-[20px]'>
+    <div className='w-full h-[100vh] bg-cover flex justify-center items-center' style={{backgroundImage:`url(${bg})`}}>
+       <form onSubmit={handleSignIn} className='w-[90%] h-[600px] max-w-[500px] bg-[#00000062] backdrop-blur shadow-lg shadow-black flex flex-col items-center justify-center gap-[20px] px-[20px]'>
             <h1 className='text-white text-[30px] font-semibold mb-[30px]'>Register to <span className='text-blue-400 '>
              virtual Assistant </span></h1>
              
@@ -61,7 +68,7 @@ const navigate = useNavigate()
   />
 )}
 
-                
+
 </div>
 
 {
@@ -69,10 +76,12 @@ Err.length > 0 && <p className='text-red-500 '>
   *{Err}
 </p>
 }
-<button className='min-w-[150px] text-black mt-[30px] font-semibold h-[60px] bg-white rounded-full text-[19px] '>Sign Up</button>
-<p className='text-white text-[18px] cursor-pointer' onClick={()=>navigate("/signin")}>Already have an account ? <span className='text-blue-400'>Sign In</span></p>
-       </form>
-    </div> 
+
+<button disabled={loading} className='min-w-[150px] text-black mt-[30px] font-semibold h-[60px] bg-white rounded-full text-[19px] '>{ loading ? "Loading...." :"Sign In"}</button>
+
+<p className='text-white text-[18px] cursor-pointer' onClick={()=>navigate("/signup")}>want to create a new account ? <span className='text-blue-400'> Sign Up</span></p>
+      </form>
+  </div> 
   )
 }
 
