@@ -5,7 +5,10 @@ import axios from 'axios'
 export const userDataContext = createContext()
 
 function UserContext({children}){
-    const serverUrl = "http://localhost:8000"
+   const serverUrl =
+  window.location.hostname === "localhost"
+    ? "http://localhost:8000"
+    : `http://${window.location.hostname}:8000`;
     const [userData,setUserData] = useState(null)
     
       const [frontendImage,setFrontendImage]=useState(null)
@@ -22,15 +25,24 @@ function UserContext({children}){
 
       }catch(error){
           console.log(error)
-
       }
+    }
+
+    const getGeminiResponse = async (command)=>{
+        try {
+          const result = await axios.post(`${serverUrl}/api/user/asktoAssistant`,{command},{withCredentials:true})
+          return result.data
+        } 
+        catch (error) {
+          console.log(error)
+        }
     }
 
     useEffect(()=>{
       handleCurrentUser()
     },[])
 
-   const value={serverUrl,userData,setUserData,frontendImage,setFrontendImage,backendImage,setBackendImage,selectedImage,setSelectedImage}
+   const value={serverUrl,userData,setUserData,frontendImage,setFrontendImage,backendImage,setBackendImage,selectedImage,setSelectedImage,getGeminiResponse}
 
   return (
     <div>
@@ -42,3 +54,4 @@ function UserContext({children}){
 }
 
 export default UserContext
+

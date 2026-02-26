@@ -10,7 +10,7 @@ const Customize2 = () => {
   const {userData,backendImage,selectedImage,serverUrl,setUserData} = useContext(userDataContext)
   const navigate = useNavigate()
 
-  const [assistantName,setAssistantName]=useState(userData?.AssistantName || "")
+  const [assistantName,setAssistantName]=useState(userData?.assistantName || "")
 
   const [loading,setLoading]=useState(false)
 
