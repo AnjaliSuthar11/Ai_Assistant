@@ -56,7 +56,7 @@ useEffect(() => {
         <img src={userData?.assistantImage} alt='' className='h-full object-cover '/> 
       </div>
 
-    <h1 className='text-white text-[18px] font-semibold '>I'm {userData.assistantName}</h1>
+    {/* <h1 className='text-white text-[18px] font-semibold '>I'm {userData.assistantName}</h1> */}
      
     
 
