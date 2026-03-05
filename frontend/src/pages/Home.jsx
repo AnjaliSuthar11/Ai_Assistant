@@ -18,6 +18,7 @@ const Home = () => {
       setUserData(null)
       console.log(error)
     }
+
   }
 
 useEffect(() => {
@@ -52,11 +53,16 @@ useEffect(() => {
       <button className='absolute min-w-[150px] text-black mt-[30px] font-semibold h-[60px] bg-white rounded-full text-[19px] top-[100px] right-[20px] px-[20px] py-[10px] cursor-pointer '>Customize your Assistant</button>
     
       <div className='w-[300px] h-[400px] flex justify-center items-center overflow-hidden rounded-4xl shadow-lg '>
-        <img src={userData?.assistantImage} alt='' className='h-full object-cover '/>
+        <img src={userData?.assistantImage} alt='' className='h-full object-cover '/> 
       </div>
+
     <h1 className='text-white text-[18px] font-semibold '>I'm {userData.assistantName}</h1>
+     
+    
+
+
     </div>
-  )
+  )  
 }
 
 export default Home
